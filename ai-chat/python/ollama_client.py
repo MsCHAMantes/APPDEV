@@ -10,9 +10,10 @@ class OllamaClient:
     def __init__(self) -> None:
         self.host = os.getenv("OLLAMA_HOST", "127.0.0.1")
         self.port = os.getenv("OLLAMA_PORT", "11434")
-        self.model = os.getenv("OLLAMA_MODEL", "naruto")
+        self.model = "phi"
         self.system_prompt = os.getenv("OLLAMA_SYSTEM_PROMPT")
-        self.timeout = float(os.getenv("OLLAMA_TIMEOUT", "30"))
+        self.timeout = float("120")  # 2 minutes
+
 
     def chat(
         self,
