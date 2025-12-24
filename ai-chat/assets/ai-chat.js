@@ -1,4 +1,3 @@
-// Text-only chat widget (voice features removed)
 (function () {
   const defaultApi = 'http://127.0.0.1:5055/ask';
   const api = window.AI_COM_API || defaultApi;
@@ -26,10 +25,10 @@
       bottom: '16px',
       width: '320px',
       maxHeight: '60vh',
-      background: '#fff',
-      border: '1px solid #e5e7eb',
+      background: '#fff8f6',
+      border: '1px solid #c08080', 
       borderRadius: '10px',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.12)',
+      boxShadow: '0 10px 30px rgba(192,128,128,0.2)',
       display: 'flex',
       flexDirection: 'column',
       overflow: 'hidden',
@@ -38,7 +37,7 @@
 
     const header = document.createElement('div');
     Object.assign(header.style, {
-      background: '#2563eb',
+      background: '#c08080',
       color: '#fff',
       padding: '10px 12px',
       fontWeight: 'bold',
@@ -78,7 +77,7 @@
       display: 'flex',
       gap: '6px',
       padding: '8px',
-      borderTop: '1px solid #e5e7eb',
+      borderTop: '1px solid #c08080',
       alignItems: 'center'
     });
 
@@ -87,14 +86,14 @@
     Object.assign(input.style, {
       flex: '1',
       padding: '8px',
-      border: '1px solid #e5e7eb',
+      border: '1px solid #c08080',
       borderRadius: '6px'
     });
 
     const send = document.createElement('button');
     Object.assign(send, { type: 'submit', textContent: 'Send' });
     Object.assign(send.style, {
-      background: '#2563eb',
+      background: '#b85c55', 
       color: '#fff',
       border: 'none',
       borderRadius: '6px',
@@ -155,9 +154,9 @@
       bubble.style.whiteSpace = 'pre-wrap';
       if (role === 'user') {
         bubble.style.textAlign = 'right';
-        bubble.innerHTML = '<span style="display:inline-block;background:#2563eb;color:#fff;padding:6px 8px;border-radius:8px;">' + escapeHtml(text) + '</span>';
+        bubble.innerHTML = '<span style="display:inline-block;background:#b85c55;color:#fff;padding:6px 8px;border-radius:8px;">' + escapeHtml(text) + '</span>';
       } else {
-        bubble.innerHTML = '<span style="display:inline-block;background:#f3f4f6;color:#111;padding:6px 8px;border-radius:8px;">' + escapeHtml(text) + '</span>';
+        bubble.innerHTML = '<span style="display:inline-block;background:#fff0f0;color:#111;padding:6px 8px;border-radius:8px;">' + escapeHtml(text) + '</span>';
       }
       messages.appendChild(bubble);
       messages.scrollTop = messages.scrollHeight;
@@ -243,4 +242,3 @@
     }
   }
 })();
-
