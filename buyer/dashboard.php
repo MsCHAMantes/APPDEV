@@ -21,9 +21,9 @@
     <style>
         :root {
             --bg-color: #faf3f3;
-            --accent-pink: #eecbc9; /* The shadow box color */
+            --accent-pink: #eecbc9; 
             --text-dark: #2c2c2c;
-            --text-highlight: #b87e7c; /* The "natural" text color */
+            --text-highlight: #b87e7c; 
             --font-logo: 'Orbitron', sans-serif;
             --font-main: 'Montserrat', sans-serif;
             --font-headline: 'Tenor Sans', sans-serif;
@@ -39,10 +39,9 @@
             background-color: var(--bg-color);
             font-family: var(--font-main);
             color: var(--text-dark);
-            overflow-x: hidden; /* Prevent horizontal scroll due to absolute positioning nuances */
+            overflow-x: hidden;
         }
 
-        /* ================= HEADER ================= */
         header {
             display: flex;
             justify-content: space-between;
@@ -111,9 +110,6 @@
             color: #887171;
             cursor: pointer;
         }
-
-
-        /* ================= MAIN HERO SECTION ================= */
         .hero-section {
             display: flex;
             justify-content: space-between;
@@ -122,8 +118,6 @@
             padding: 0 20px;
             position: relative;
         }
-
-        /* === CENTER TEXT === */
         .hero-text-content {
             text-align: center;
             max-width: 600px;
@@ -160,48 +154,31 @@
             max-width: 80%;
             margin: 0 auto;
         }
-
-
-        /* ================= IMAGE COLLAGE STYLES ================= */
-        /* This is the complex part. We use absolute positioning within relative side containers. */
-
         .collage-container {
             position: relative;
-            width: 25%; /* Occupy sides */
-            height: 600px; /* Fixed height to manage absolute positions */
+            width: 25%; 
+            height: 600px; 
         }
-
-        /* The Reusable Image Component Style */
         .collage-item {
             position: absolute;
             z-index: 2;
         }
-
-        /* The pink shadow box */
         .img-box-shadow {
             background-color: var(--accent-pink);
             display: inline-block;
-            /* The container determines the size based on the image inside */
         }
-
-        /* The image itself, shifted up and left */
         .img-box-shadow img {
             display: block;
-            transform: translate(-12px, -12px); /* Creates the offset effect */
+            transform: translate(-12px, -12px); 
             width: auto;
             height: auto;
-            max-width: 130px; /* Base constraint, varied slightly below */
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.05); /* Subtle realism shadow */
+            max-width: 130px; 
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05); 
         }
-
-        /* Sizing variations based on the design */
         .size-s img { max-width: 100px; }
         .size-m img { max-width: 125px; }
         .size-l img { max-width: 150px; }
         .crop-tall img { max-height: 160px; object-fit: cover; }
-
-
-        /* === LEFT SIDE POSITIONS === */
         .l-pos-1 { top: 20px; left: -60px; }
         .l-pos-2 { top: 30px; left: 77px; z-index: 3;}
         .l-pos-3 { top: 200px; left: 30px; }
@@ -210,10 +187,7 @@
         .l-pos-6 { top: 390px; left: 110px; z-index: 3;}
         .l-pos-7 { top: 380px; left: 240px; }
         .l-pos-8 { top: 22px; left: 205px; z-index: 3;}
-
-         /* === RIGHT SIDE POSITIONS === */
          .collage-right {
-             /* Shift the whole container slightly right to match design gutter */
              transform: translateX(20px); 
          }
         .r-pos-1 { top: 20px; left: 0; z-index: 3;}
@@ -224,9 +198,6 @@
         .r-pos-6 { top: 400px; left: 0px; z-index: 3;}
         .r-pos-7 { top: 380px; left: 130px; }
         .r-pos-8 { top: 400px; left: 260px; z-index: 3;}
-
-        /* Responsive tweaks for smaller screens to prevent total breakage, 
-           though exact replication breaks down on mobile */
            
         @media (max-width: 1200px) {
              .headline { font-size: 2.8rem; }
@@ -293,19 +264,14 @@
 
     <div class="nav-right">
         <div class="search-bar-container">
-            <input type="text" class="search-bar">
+            <input type="text" class="search-bar" placeholder="Welcome beautiful!">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
         </div>
 
         <a href="../cart.php">
     <i class="fa-solid fa-cart-shopping nav-icon"></i>
 </a>
-
-
-        <!-- USER ICON -->
         <i class="fa-regular fa-user nav-icon" id="userIcon"></i>
-
-        <!-- USER NAVBAR -->
         <div class="user-dropdown" id="userDropdown">
             <a href="../profile.php">Profile</a>
             <a href="../orders.php">Orders</a>
@@ -390,21 +356,15 @@
     const textSpan = document.getElementById("changing-word");
 
     setInterval(() => {
-        // fade out
         textSpan.classList.add("fade");
         
         setTimeout(() => {
-            // change word
             index = (index + 1) % words.length;
             textSpan.textContent = words[index];
-
-            // fade in
             textSpan.classList.remove("fade");
         }, 600);
 
-    }, 3000); // every 3 seconds
-
-        // USER NAVBAR TOGGLE
+    }, 3000); 
     const userIcon = document.getElementById("userIcon");
     const userDropdown = document.getElementById("userDropdown");
 
