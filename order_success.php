@@ -9,7 +9,6 @@ if (!isset($_GET['order_id'])) {
 
 $orderId = (int)$_GET['order_id'];
 
-// Fetch order info
 $stmt = $con->prepare("SELECT * FROM orders WHERE id = :id");
 $stmt->execute([':id' => $orderId]);
 $order = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -18,8 +17,6 @@ if (!$order) {
     die("Order not found.");
 }
 
-// Fetch order items
-// Fetch order items with product names
 $stmt = $con->prepare("
     SELECT oi.*, p.name AS product_name 
     FROM order_items oi 

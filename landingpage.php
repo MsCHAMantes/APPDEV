@@ -23,8 +23,8 @@ require './config/db.php';
             justify-content: space-between;
             align-items: center;
             padding: 12px 35px;
-            position: relative; /* ✅ fixed position issue */
-            z-index: 9999;      /* ✅ always on top */
+            position: relative; 
+            z-index: 9999;      
             background-color: none;
         }
 
@@ -58,7 +58,7 @@ require './config/db.php';
             text-align: center;
             color: #000;
             padding-top: 15px;
-            z-index: 1; /* lower than navbar */
+            z-index: 1; 
         }
 
         h2 {
@@ -68,7 +68,7 @@ require './config/db.php';
             top: -70px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 2; /* lower than navbar */
+            z-index: 2;
             color: rgba(0, 0, 0, 0.8);
         }
 
@@ -89,7 +89,7 @@ require './config/db.php';
             transform: translateX(-50%);
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            z-index: 1; /* lower than navbar */
+            z-index: 1; 
         }
 
         .image2 { width: 320px; height: auto; top: 80px; left: 50%; }
@@ -109,7 +109,7 @@ require './config/db.php';
             color: #000;
             font-size: 40px;
             line-height: 1.5;
-            z-index: 1; /* lower than navbar */
+            z-index: 1;
         }
 
         .left-text small {
@@ -127,7 +127,7 @@ require './config/db.php';
             text-align: right;
             color: #000;
             font-size: 28px;
-            z-index: 1; /* lower than navbar */
+            z-index: 1;
         }
 
         html { scroll-behavior: smooth; }
@@ -185,11 +185,11 @@ require './config/db.php';
     gap: 20px;
     padding: 20px;
     scroll-behavior: smooth;
-    scrollbar-width: none; /* hide scrollbar */
+    scrollbar-width: none; 
 }
 
 .image-scroller::-webkit-scrollbar {
-    display: none; /* hide scrollbar for chrome */
+    display: none; 
 }
 
 .image-scroller img {
@@ -199,7 +199,6 @@ require './config/db.php';
     border-radius: 10px;
 }
 
-/* LEFT–RIGHT BUTTONS */
 .scroll-btn {
     position: absolute;
     top: 50%;
@@ -273,8 +272,6 @@ require './config/db.php';
     <img src="image4.png" class="overlay-image image4">
 </div>
 
-
-<!-- ABOUT SECTION -->
 <section id="about" style="position: relative;">
     <img src="design.png" style="position: absolute; top: -120px; left: 850px; width: 400px; height: 400px; opacity: 50%;">
     <div style="display: flex; align-items: center; margin: 50px 0;">
@@ -310,12 +307,8 @@ require './config/db.php';
 
 </section>
 
-
-<!-- CONTACT SECTION -->
 <section id="contact" style="background-color: #cba2a3; padding: 40px 5%;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-
-        <!-- LEFT SIDE -->
         <div style="display: flex; flex-direction: column; gap: 12px;">
             <div style="font-family: 'Orbitron', sans-serif; font-size: 2.85rem; font-weight: 600;">T<span class="highlight">C</span>A</div>
             <p style="font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #1a1a1a;">
@@ -327,8 +320,6 @@ require './config/db.php';
                 <a href="https://x.com" target="_blank" style="color: #432320;"><i class="fa-solid fa-x"></i></a>
             </div>
         </div>
-
-        <!-- RIGHT SIDE CONTACT CARD -->
         <div>
             <p style="font-size: 0.75rem; position: absolute; margin-top: 70px;">You can also reach us here. We look forward to assisting you.</p>
             <div style="margin-top: 100px; background-color: #eeddd8; padding: 15px 25px; border-radius: 8px; min-width: 280px; font-family: 'Poppins', sans-serif; font-size: 0.85rem;">
@@ -356,18 +347,14 @@ require './config/db.php';
         index = (index + 1) % images.length;
         images[index].classList.add('active');
     }, 3000);
-
-    // Reset hash on refresh
     if (window.location.hash) {
         history.replaceState(null, null, window.location.pathname);
     }
-
-    // Observe sections to update URL hash when scrolling
     const sections = document.querySelectorAll('section');
     const options = {
         root: null,
         rootMargin: '0px',
-        threshold: 0.5 // 50% of section visible
+        threshold: 0.5 
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -399,7 +386,7 @@ function scrollRight() {
         behavior: "smooth"
     });
 }  
-// REVIEW SLIDER
+
 const reviewSlides = document.querySelectorAll('.review-slide');
 let reviewIndex = 0;
 
@@ -409,13 +396,11 @@ function showSlide(index){
     });
 }
 
-// Auto swipe every 3 sec
 let reviewTimer = setInterval(()=>{
     reviewIndex = (reviewIndex + 1) % reviewSlides.length;
     showSlide(reviewIndex);
 }, 3000);
 
-// Buttons
 document.getElementById('prevReview').addEventListener('click', ()=>{
     reviewIndex = (reviewIndex - 1 + reviewSlides.length) % reviewSlides.length;
     showSlide(reviewIndex);

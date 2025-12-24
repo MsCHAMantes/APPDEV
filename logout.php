@@ -1,6 +1,6 @@
 <?php
 session_start();
-require './config/db.php'; // Make sure this points to your PDO connection
+require './config/db.php'; 
 
 if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
 
@@ -8,7 +8,6 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
     $role    = $_SESSION['role'] ?? null;
     $username = $_SESSION['username'] ?? "User";
 
-    // ===== LOG LOGOUT ACTIVITY =====
     if ($user_id && $role) {
         $ip = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
         $stmt = $con->prepare("
@@ -17,7 +16,6 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
         ");
         $stmt->execute([$user_id, $role, 'Logged out', $ip]);
     }
-    // ===============================
 
     $_SESSION = [];
     session_destroy();

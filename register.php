@@ -7,21 +7,21 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
     $password = $_POST['password'];
     $role     = 'buyer';
 
-    // Username validation
+ 
     if(!preg_match("/^[a-zA-Z0-9_]{5,20}$/", $username)) {
         echo "<script>alert('Username must be 5-20 characters, letters/numbers/underscore only.');</script>";
     }
-    // Email validation
+ 
     else if(!preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/", $email)) {
         echo "<script>alert('Invalid email format.');</script>";
     }
-    // Password validation
+ 
     else if(strlen($password) < 8) {
         echo "<script>alert('Password must be at least 8 characters long.');</script>";
     }
     else {
 
-        // Check if username exists
+     
         $check = $con->prepare("SELECT user_id FROM users WHERE username = ? LIMIT 1");
         $check->execute([$username]);
 
@@ -78,16 +78,14 @@ body{
     align-items:center;
     justify-content:space-between;
 }
-
-/* Left Image */
+ 
 .image-section img{
     width:435px;
     height: 620px;
     margin-left: 130px;
     margin-top: -10px;
 }
-
-/* Registration Box */
+ 
 .register-box{
     background:#352F2F;
     width:300px;
@@ -152,13 +150,10 @@ input{
 <body>
 
 <div class="container">
-
-    <!-- Product Image -->
     <div class="image-section">
         <img src="registerbg.png">
     </div>
 
-    <!-- REGISTER FORM -->
     <div class="register-box">
         <h2>Create Account</h2>
 

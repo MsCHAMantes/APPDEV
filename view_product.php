@@ -2,13 +2,11 @@
 session_start();
 require './config/db.php';
 
-// Get product ID from URL
 $product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($product_id === 0) {
     die("Product not found.");
 }
 
-// Fetch product info
 $stmt = $con->prepare("
     SELECT p.id, p.name, p.price, p.image_path, p.description, c.name AS category_name
     FROM products p
@@ -22,7 +20,6 @@ if (!$product) {
     die("Product not found.");
 }
 
-// Example placeholders for sold count and rating
 $sold_count = 500;
 $rating = 4.8;
 ?>
@@ -62,8 +59,6 @@ $rating = 4.8;
             gap: 40px;
             position: relative;
         }
-
-        /* Cancel Button */
         .cancel-btn {
             position: absolute;
             top: -20px;
@@ -76,8 +71,6 @@ $rating = 4.8;
             text-decoration: none;
             font-size: 14px;
         }
-
-        /* Left Side: Product Image & Platform */
         .product-visuals {
             flex: 1;
             display: flex;
@@ -109,8 +102,6 @@ $rating = 4.8;
             font-size: 12px;
 
         }
-
-        /* Right Side: Product Info */
         .product-info {
             flex: 1.2;
             display: flex;
@@ -155,8 +146,6 @@ $rating = 4.8;
             align-items: center;
             gap: 5px;
         }
-
-        /* Buttons */
         .action-area {
             display: flex;
             gap: 20px;

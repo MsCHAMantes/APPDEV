@@ -9,15 +9,10 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-/* ==========================
-   FETCH USER
-========================== */
 $user = $conn->query("SELECT * FROM users WHERE user_id = $user_id")->fetch_assoc();
-$payment_method = $user['payment_method'] ?? ''; // fetch saved payment method
+$payment_method = $user['payment_method'] ?? ''; 
 
-/* ==========================
-   UPDATE PROFILE INFO
-========================== */
+
 if (isset($_POST['update_profile'])) {
     $stmt = $conn->prepare("
         UPDATE users SET 
@@ -37,9 +32,6 @@ if (isset($_POST['update_profile'])) {
     $user = $conn->query("SELECT * FROM users WHERE user_id = $user_id")->fetch_assoc();
 }
 
-/* ==========================
-   UPDATE PROFILE PICTURE
-========================== */
 if (isset($_POST['update_profile_pic'])) {
     if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['name'] != '') {
         $dir = "uploads/profiles/";
@@ -51,9 +43,7 @@ if (isset($_POST['update_profile_pic'])) {
     }
 }
 
-/* ==========================
-   UPDATE PAYMENT METHOD
-========================== */
+
 if (isset($_POST['update_payment'])) {
     $method = $_POST['payment_method'] === 'COD' ? 'COD' : 'GCash';
     $stmt = $conn->prepare("UPDATE users SET payment_method=? WHERE user_id=?");
@@ -88,7 +78,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-        position: relative;   /* IMPORTANT */
+        position: relative;   
     overflow: hidden;
 }
 .container {
@@ -137,8 +127,6 @@ body {
 .username-val { font-size: 22px; color: var(--text-dark); font-weight: 500; margin-left: 8px; }
 .account-status-top { font-size: 10px; color: var(--text-gray); margin-top: 5px; }
 .main-divider-horizontal { border: none; height: 2px; background-color: #000; margin-bottom: 20px; }
-
-/* MAIN DASHBOARD GRID (Used for all views) */
 .view-grid {
     display: grid;
     grid-template-columns: 1fr 2px 1fr;
@@ -151,8 +139,6 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
 .label { width: 100px; color: var(--text-gray); }
 .value { color: var(--text-dark); font-weight: 500; }
 .status-text { color: var(--status-orange); font-weight: bold; font-size: 12px; text-transform: uppercase;}
-
-/* VIEW CONTAINERS */
 .view-container { width: 100%; text-align: center; }
 .view-container h2 {
     font-size: 16px;
@@ -162,8 +148,6 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
     font-weight: bold;
     text-transform: uppercase;
 }
-
-/* INPUTS & SELECTABLE BOXES */
 .edit-box input, .payment-option {
     width: 100%;
     padding: 12px;
@@ -179,15 +163,11 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
     background: #fff;
 }
 .payment-option:hover { background-color: #f9f9f9; }
-
-/* BUTTONS */
 .btn { width: 100%; border: none; border-radius: 8px; padding: 12px; font-size: 13px; cursor: pointer; margin-top: 8px; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; box-sizing: border-box; }
 .btn-pink { background-color: var(--btn-pink); }
 .btn-gray { background-color: var(--btn-gray); }
 
 .hidden { display: none; }
-
-/* SECURITY / PASSWORD FIELDS */
 .password-form-container {
     max-width: 400px;
     margin: 0 auto;
@@ -208,24 +188,20 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
     margin-bottom: 15px;
     box-sizing: border-box;
 }
-/* Scrollable container for order history */
 .history-scroll {
-    max-height: 400px; /* adjust as needed */
+    max-height: 400px; 
     overflow-y: auto;
-    padding-right: 10px; /* avoid scrollbar covering content */
+    padding-right: 10px; 
 }
-
-/* Grid for order cards */
 .history-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    grid-template-columns: repeat(3, 1fr); 
     gap: 15px;
     text-align: left;
 }
 
-/* Unified styling for order cards */
 .order-card {
-    background: var(--input-fill, #fffaf9); /* fallback color */
+    background: var(--input-fill, #fffaf9); 
     padding: 15px;
     border-radius: 10px;
     font-size: 11px;
@@ -235,8 +211,6 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
     box-shadow: 0 1px 8px rgba(0,0,0,0.05);
     margin-bottom: 10px;
 }
-
-/* Optional: make scrollbar slightly nicer */
 .history-scroll::-webkit-scrollbar {
     width: 8px;
 }
@@ -259,28 +233,20 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
     color: #8e6a6a;
 }
 .back-dashboard-btn {
-    /* Absolute positioning at top left */
     position: absolute;
     top: 15px;
     left: 15px;
     z-index: 9999;
-    
-    /* Remove default link styling */
     text-decoration: none;
     display: inline-block;
-    
-    /* Smooth hover transition */
     transition: transform 0.2s ease-in-out, opacity 0.2s ease;
   }
 
   .back-dashboard-btn img {
-    /* Adjust size as needed */
     width: 50px; 
     height: auto;
     display: block;
   }
-
-  /* Interaction effects */
   .back-dashboard-btn:hover {
     transform: scale(1.05);
     opacity: 0.9;
@@ -295,8 +261,8 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
     height: auto;
     object-fit: contain;
 
-    z-index: 1;     /* nasa likod ng container */
-    pointer-events: none; /* hindi clickable */
+    z-index: 1;     
+    pointer-events: none; 
 }
 
 </style>
@@ -310,7 +276,6 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
 <img src="profilebg.png" class="image1">
 
 <div class="container">
-    <!-- PROFILE HEADER -->
     <div class="profile-header">
         <div class="avatar-circle" style="background-image: url('<?= htmlspecialchars($user['profile_pic'] ?: 'default-avatar.png') ?>');">
             <form method="post" enctype="multipart/form-data">
@@ -328,8 +293,6 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
     </div>
 
     <hr class="main-divider-horizontal">
-
-    <!-- DASHBOARD GRID -->
     <div id="dashboardView" class="view-grid">
         <div class="left-col">
             <h3>Account Information</h3>
@@ -368,8 +331,6 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
             </div>
         </div>
     </div>
-
-    <!-- EDIT ACCOUNT VIEW -->
     <div id="editView" class="view-container hidden">
         <h2>Account Information</h2>
         <div class="section-box edit-box">
@@ -385,8 +346,6 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
             </form>
         </div>
     </div>
-
-    <!-- PAYMENT METHOD VIEW -->
     <div id="paymentView" class="view-container hidden">
         <h2>Payment Method</h2>
         <div class="section-box edit-box" style="text-align:center;">
@@ -406,7 +365,6 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
         </div>
     </div>
 
-<!-- ORDER HISTORY VIEW -->
 <div id="historyView" class="view-container hidden">
     <h2>View Order History</h2>
         <div class="history-scroll">
@@ -424,14 +382,12 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
             $userId = (int)$_SESSION['user_id'];
 
             try {
-                // Fetch orders for the logged-in user
                 $stmt = $con->prepare("SELECT * FROM orders WHERE buyer_id = ? ORDER BY created_at DESC");
                 $stmt->execute([$userId]);
                 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 if ($orders) {
                     foreach ($orders as $order) {
-                        // Fetch items for this order with product names
                         $stmtItems = $con->prepare("
                             SELECT oi.quantity, oi.total_price, p.name AS product_name
                             FROM order_items oi
@@ -443,7 +399,6 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
 
                         $totalItems = array_sum(array_column($items, 'quantity'));
 
-                        // Status color
                         $statusColor = match(strtolower($order['order_status'])) {
                             'delivered' => 'green',
                             'pending' => 'orange',
@@ -478,10 +433,6 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
     <button class="btn btn-gray" onclick="showView('dashboardView')" style="width:200px; margin: 30px auto;">Back</button>
 </div>
 
-
-<!-- SECURITY VIEW -->
-<!-- SECURITY VIEW -->
-<!-- SECURITY VIEW -->
 <div id="securityView" class="view-container hidden">
     <h2>Change Password</h2>
     <div class="password-form-container">
@@ -513,13 +464,11 @@ h3 { font-size: 12px; color: var(--text-gray); text-transform: uppercase; margin
                 echo "<p style='color:red;'>New password and confirmation do not match.</p>";
             } else {
                 try {
-                    // Fetch current password hash from database
                     $stmt = $con->prepare("SELECT password_hash FROM users WHERE user_id = ?");
                     $stmt->execute([$userId]);
                     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                     if ($row && password_verify($oldPassword, $row['password_hash'])) {
-                        // Hash new password and update
                         $newHash = password_hash($newPassword, PASSWORD_DEFAULT);
                         $stmtUpdate = $con->prepare("UPDATE users SET password_hash = ?, updated_at = NOW() WHERE user_id = ?");
                         $stmtUpdate->execute([$newHash, $userId]);
@@ -547,8 +496,6 @@ function showView(viewId) {
     views.forEach(id => document.getElementById(id).classList.add('hidden'));
     document.getElementById(viewId).classList.remove('hidden');
 }
-
-// Edit Form Validation
 const editForm = document.getElementById('editForm');
 editForm.addEventListener('submit', function(e) {
     const inputs = editForm.querySelectorAll('input');

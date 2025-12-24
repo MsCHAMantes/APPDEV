@@ -8,16 +8,13 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $userId = (int)$_SESSION['user_id'];
-
-// ===== CHECK IF SINGLE PRODUCT BUY NOW =====
 $items = [];
 $totals = ['subtotal' => 0.0, 'count' => 0];
-$shipping_fee = 50.00; // example shipping fee
+$shipping_fee = 50.00;
 $isSingleProduct = false;
-$backLink = 'cart.php'; // default
+$backLink = 'cart.php'; 
 
 if (isset($_GET['product_id'])) {
-    // Single product checkout
     $productId = (int)$_GET['product_id'];
     $stmt = $con->prepare("SELECT id, name, price FROM products WHERE id = ? AND status='active'");
     $stmt->execute([$productId]);
@@ -35,10 +32,9 @@ if (isset($_GET['product_id'])) {
     ];
 
     $isSingleProduct = true;
-    $backLink = "product.php?id={$productId}"; // cancel order goes back to product page
+    $backLink = "product.php?id={$productId}"; 
 
 } else {
-    // Regular cart checkout
     try {
         $stmt = $con->prepare("
             SELECT c.product_id, c.quantity, p.name, p.price
@@ -53,19 +49,16 @@ if (isset($_GET['product_id'])) {
     }
 }
 
-// ===== CALCULATE TOTALS =====
 foreach ($items as $row) {
     $totals['subtotal'] += ((float)$row['price']) * (int)$row['quantity'];
     $totals['count'] += (int)$row['quantity'];
 }
 $totals['total'] = $totals['subtotal'] + $shipping_fee;
 
-// ===== PROCESS ORDER =====
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $address = trim($_POST['shipping_address'] ?? '');
     $payment_method = $_POST['payment_method'] ?? '';
 
-    // Validate payment method
     if (!in_array($payment_method, ['Cash on Delivery', 'GCASH'])) {
         die("Invalid payment method.");
     }
@@ -73,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $con->beginTransaction();
 
-        // Insert order
+
  $stmt = $con->prepare("
     INSERT INTO orders 
     (buyer_id, total_amount, shipping_address, payment_method, order_status, payment_status, created_at, updated_at) 
@@ -82,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $stmt->execute([
     ':buyer_id' => $userId,
-    ':total_amount' => $totals['total'], // sum of items + shipping
+    ':total_amount' => $totals['total'], 
     ':shipping_address' => $address,
     ':payment_method' => $payment_method
 ]);
@@ -90,7 +83,6 @@ $stmt->execute([
 
         $orderId = $con->lastInsertId();
 
-        // Insert order items
         $itemStmt = $con->prepare("
     INSERT INTO order_items
     (order_id, product_id, quantity, unit_price, total_price)
@@ -109,8 +101,6 @@ foreach ($items as $row) {
     ]);
 }
 
-
-        // Clear cart only if this is NOT a single product checkout
         if (!$isSingleProduct) {
             $stmt = $con->prepare("DELETE FROM cart WHERE user_id = :uid");
             $stmt->execute([':uid' => $userId]);
@@ -144,7 +134,6 @@ body {
     min-height: 100vh;
 }
 
-/* ===== PAGE WRAPPER ===== */
 main {
     max-width: 900px;
     margin: 30px auto 140px;
@@ -159,14 +148,12 @@ h1 {
     color: #5e3e3e;
 }
 
-/* ===== LAYOUT ===== */
 .checkout-container {
     display: flex;
     gap: 24px;
     flex-wrap: wrap;
 }
 
-/* ===== CARD STYLE ===== */
 .card {
     background: #fff;
     border-radius: 10px;
@@ -184,7 +171,6 @@ h1 {
     font-weight: 500;
 }
 
-/* ===== FORM ===== */
 label {
     display: block;
     font-size: 0.85rem;
@@ -212,7 +198,6 @@ select {
     background-color: #fafafa;
 }
 
-/* ===== ORDER SUMMARY TABLE ===== */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -239,7 +224,6 @@ th {
      
 }
 
-/* ===== FIXED BOTTOM BAR ===== */
 .checkout-footer {
     position: fixed;
     bottom: 0;
@@ -253,7 +237,6 @@ th {
     align-items: center;
 }
 
-/* ===== PILL BUTTONS (SAME AS CART) ===== */
 .btn-pill {
     background-color: #fffaf9;
     border: 1px solid #b38b8b;
@@ -286,8 +269,6 @@ th {
 <main>
     <h1>Checkout</h1>
 <form method="POST" class="checkout-container">
-
-    <!-- ===== SHIPPING INFO ===== -->
     <div class="card">
         <h2>Shipping Information</h2>
 
@@ -300,8 +281,6 @@ th {
             <option value="GCASH">GCASH</option>
         </select>
     </div>
-
-    <!-- ===== ORDER SUMMARY ===== -->
     <div class="card">
         <h2>Order Summary</h2>
 
@@ -343,8 +322,6 @@ th {
             </tbody>
         </table>
     </div>
-
-    <!-- ===== FIXED FOOTER INSIDE FORM ===== -->
 <div class="checkout-footer">
     <a href="<?= htmlspecialchars($backLink); ?>" class="btn-pill">
         <?= $isSingleProduct ? 'Cancel Order' : 'Back to Cart'; ?>

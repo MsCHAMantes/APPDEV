@@ -9,7 +9,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $userId = (int)$_SESSION['user_id'];
 
-// Fetch cart items joined with product data
 $items = [];
 $totals = ['subtotal' => 0.0, 'count' => 0];
 try {
@@ -47,7 +46,7 @@ body {
 main {
     flex: 1;
     max-width: 900px;
-    margin: 20px auto 140px; /* space for fixed bottom */
+    margin: 20px auto 140px; 
     padding: 0 20px;
 }
 h1 {
@@ -57,8 +56,6 @@ h1 {
     margin-bottom: 30px;
     color: #5e3e3e;
 }
-
-/* Table Styling */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -81,8 +78,6 @@ th {
 .price-col, .total-col { text-align: right; width: 120px; }
 .quantity-col { text-align: center; width: 80px; }
 input[type="number"] { width: 60px; padding: 5px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
-
-/* Pill Buttons */
 .btn-pill {
     background-color: #fffaf9;
     border: 1px solid #b38b8b;
@@ -105,8 +100,6 @@ input[type="number"] { width: 60px; padding: 5px; border-radius: 6px; border: 1p
     cursor: pointer;
     font-size: 0.85rem;
 }
-
-/* ================= FIXED BOTTOM SUMMARY ================= */
 .cart-summary {
     position: fixed;
     bottom: 0;
@@ -124,7 +117,7 @@ input[type="number"] { width: 60px; padding: 5px; border-radius: 6px; border: 1p
 .cart-summary .totals {
     text-align: right;
     font-size: 1rem;
-    margin-right: 50px; /* Add right margin */
+    margin-right: 50px; 
 }
 
 .cart-summary .totals div { margin-bottom: 6px; }
@@ -168,8 +161,6 @@ input[type="number"] { width: 60px; padding: 5px; border-radius: 6px; border: 1p
     </table>
 </form>
 </main>
-
-<!-- ================= FIXED BOTTOM SUMMARY ================= -->
 <div class="cart-summary">
     <div>
         <a href="product.php" class="btn-pill">Continue Shopping</a>

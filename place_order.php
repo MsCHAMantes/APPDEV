@@ -2,28 +2,26 @@
 session_start();
 require './config/db.php';
 
-// ===== AUTH CHECK =====
 if (!isset($_SESSION['buyer_id'])) {
     header('Location: ./login.php');
     exit;
 }
 
-$userId = (int)$_SESSION['buyer_id']; // Correct session key
+$userId = (int)$_SESSION['buyer_id']; 
 
-// ===== ONLY POST =====
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ./checkout.php');
     exit;
 }
 
-// ===== CSRF CHECK =====
+
 $csrf = $_POST['csrf'] ?? '';
 if ($csrf !== md5(session_id() . 'checkout')) {
     header('Location: ./checkout.php');
     exit;
 }
 
-// ===== INPUTS =====
 $shippingAddress = trim($_POST['shipping_address'] ?? '');
 $paymentMethod = trim($_POST['payment_method'] ?? 'cod');
 
@@ -34,8 +32,6 @@ if ($shippingAddress === '') {
 
 try {
     $con->beginTransaction();
-
-    // ===== GET CART ITEMS =====
     $stmt = $con->prepare("
         SELECT c.product_id, c.quantity AS cart_qty, p.name, p.price, p.quantity AS stock
         FROM cart c
@@ -52,7 +48,6 @@ try {
         exit;
     }
 
-    // ===== CALCULATE TOTAL =====
     $total = 0;
     foreach ($cart as $row) {
         $qty = min((int)$row['cart_qty'], (int)$row['stock']);
@@ -66,7 +61,6 @@ try {
         exit;
     }
 
-    // ===== INSERT ORDER =====
     $orderStmt = $con->prepare("
         INSERT INTO orders
         (buyer_id, total_amount, shipping_address, payment_method, order_status, payment_status, created_at, updated_at)
@@ -74,15 +68,13 @@ try {
         (:buyer_id, :total_amount, :shipping_address, :payment_method, 'pending', 'pending', NOW(), NOW())
     ");
     $orderStmt->execute([
-        ':buyer_id' => $userId, // ✅ Correct variable
+        ':buyer_id' => $userId,
         ':total_amount' => $total,
         ':shipping_address' => $shippingAddress,
         ':payment_method' => $paymentMethod
     ]);
 
     $orderId = (int)$con->lastInsertId();
-
-    // ===== INSERT PAYMENT TRANSACTION =====
     $txnStmt = $con->prepare("
         INSERT INTO payment_transactions
         (order_id, transaction_id, amount, currency, status, payment_method, created_at)
@@ -102,7 +94,6 @@ try {
         ':payment_method' => $paymentMethod
     ]);
 
-    // ===== INSERT ORDER ITEMS & DECREMENT STOCK =====
     $itemStmt = $con->prepare("
         INSERT INTO order_items
         (order_id, product_id, product_name, quantity, unit_price, total_price)
@@ -132,14 +123,10 @@ try {
             ':pid' => (int)$row['product_id']
         ]);
     }
-
-    // ===== CLEAR CART =====
     $del = $con->prepare("DELETE FROM cart WHERE user_id = :uid");
     $del->execute([':uid' => $userId]);
 
     $con->commit();
-
-    // ===== REDIRECT TO ORDER VIEW =====
     header('Location: ./order_view.php?id=' . urlencode($orderId));
     exit;
 

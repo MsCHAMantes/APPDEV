@@ -10,7 +10,6 @@ if (!isset($_SESSION['user_id'])) {
 $userId = (int)$_SESSION['user_id'];
 
 try {
-    /* ================= REMOVE ITEM (FORCE DELETE) ================= */
     if (isset($_POST['remove_id'])) {
         $productId = (int)$_POST['remove_id'];
         $del = $con->prepare("
@@ -25,11 +24,9 @@ try {
         header('Location: cart.php');
         exit;
     }
-
-    /* ================= ADD TO CART ================= */
     if (isset($_POST['product_id'])) {
         $productId = (int)$_POST['product_id'];
-        $addQty = 1; // default add quantity
+        $addQty = 1; 
 
         $check = $con->prepare("
             SELECT quantity 
@@ -68,12 +65,10 @@ try {
         header('Location: cart.php');
         exit;
     }
-
-    /* ================= UPDATE QUANTITIES ================= */
     if (isset($_POST['qty']) && is_array($_POST['qty'])) {
         foreach ($_POST['qty'] as $pid => $qty) {
             $pid = (int)$pid;
-            $qty = max(0, (int)$qty); // ensure non-negative
+            $qty = max(0, (int)$qty); 
 
             if ($qty <= 0) {
                 $con->prepare("
@@ -98,8 +93,6 @@ try {
     }
 
 } catch (Exception $e) {
-    // Optional: log error
-    // error_log($e->getMessage());
 }
 
 header('Location: cart.php');

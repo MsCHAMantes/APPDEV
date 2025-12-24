@@ -9,8 +9,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $userId = (int)$_SESSION['user_id'];
 
-// Fetch orders WITH product name
-// Fetch orders WITH product name AND image_path
 $orders = [];
 try {
 $stmt = $con->prepare("
@@ -42,7 +40,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Orders</title>
 <style>
-/* ... Your CSS stays the same ... */
+
 :root {
   --border-color: #d8c3c3;
   --text-main: #333;
@@ -68,7 +66,6 @@ body {
   width: 100%;
 }
 
-/* ✅ FIXED GRID — EXACTLY 2 PER ROW */
 .order-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -152,7 +149,7 @@ body {
 }
 
 .back-dashboard-btn {
-    position: fixed;   /* 🔥 stays in place on scroll */
+    position: fixed;   
     top: 15px;
     left: 15px;
     z-index: 9999;
@@ -173,7 +170,6 @@ body {
   opacity: 0.9;
 }
 
-/* 📱 MOBILE FIX */
 @media (max-width: 768px) {
   .order-grid {
     grid-template-columns: 1fr;
@@ -240,7 +236,7 @@ body {
 <?php endif; ?>
 
 
-              <!-- You can loop products here if you fetch items per order -->
+
             </div>
 
             <div class="details-footer">
@@ -270,7 +266,6 @@ document.querySelectorAll('.cancel-btn').forEach(btn => {
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'success') {
-                    // remove the order card from DOM
                     card.remove();
                     alert('Order cancelled successfully!');
                 } else {

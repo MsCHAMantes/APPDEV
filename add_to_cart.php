@@ -15,10 +15,9 @@ if (!isset($_POST['product_id'])) {
 }
 
 $productId = (int)$_POST['product_id'];
-$addQty = 1; // ✅ DEFAULT QUANTITY = 1
+$addQty = 1; 
 
 try {
-    // Check if product already exists in cart
     $check = $con->prepare("
         SELECT quantity 
         FROM cart 
@@ -31,7 +30,6 @@ try {
     ]);
 
     if ($row = $check->fetch(PDO::FETCH_ASSOC)) {
-        // ✅ PRODUCT EXISTS → ADD TO EXISTING QUANTITY
         $newQty = $row['quantity'] + $addQty;
 
         $update = $con->prepare("
@@ -45,7 +43,6 @@ try {
             ':pid' => $productId
         ]);
     } else {
-        // ✅ PRODUCT NOT IN CART → INSERT WITH QUANTITY = 1
         $insert = $con->prepare("
             INSERT INTO cart (user_id, product_id, quantity)
             VALUES (:uid, :pid, :qty)
@@ -58,7 +55,6 @@ try {
     }
 
 } catch (Exception $e) {
-    // optional: log error
 }
 
 header('Location: cart.php');

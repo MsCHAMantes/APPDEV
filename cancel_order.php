@@ -13,7 +13,6 @@ if (isset($_POST['order_id'])) {
     $orderId = (int)$_POST['order_id'];
 
     try {
-        // Make sure this order belongs to this user
         $stmt = $con->prepare("UPDATE orders SET order_status='Cancelled' WHERE id=:id AND buyer_id=:uid");
         $stmt->execute([':id' => $orderId, ':uid' => $userId]);
 

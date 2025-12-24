@@ -2,16 +2,11 @@
 session_start();
 require './config/db.php';
 
-/* =========================
-   FETCH CATEGORIES
-========================= */
 $categories = [];
 $stmt = $con->query("SELECT id, name FROM categories ORDER BY name ASC");
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-/* =========================
-   FETCH ACTIVE PRODUCTS
-========================= */
+
 $products = [];
 $stmt = $con->query("
     SELECT p.id, p.name, p.price, p.image_path, c.name AS category_name
@@ -22,9 +17,6 @@ $stmt = $con->query("
 ");
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-/* =========================
-   SLUG HELPER
-========================= */
 function slugify($text) {
     return strtolower(preg_replace('/\s+/', '-', trim($text)));
 }
@@ -45,8 +37,6 @@ body {
     color: #333;
 }
 .container { max-width: 1100px; margin: 0 auto; }
-
-/* ================= SEARCH ================= */
 #search-box {
     width: 100%;
     padding: 10px 15px;
@@ -55,8 +45,6 @@ body {
     border: 1px solid #c08080;
     border-radius: 6px;
 }
-
-/* ================= BUTTON FILTERS ================= */
 .filter-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -74,8 +62,6 @@ body {
 }
 .filter-btn:hover { background: #f6dcdc; }
 .filter-btn.active { background: #b85c55; color: white; }
-
-/* ================= GRID ================= */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -103,35 +89,28 @@ body {
 .rating { font-size: 12px; color: #f0a500; font-weight: bold; }
 .sub-info { display: flex; justify-content: space-between; margin-top: 2px; }
 .back-dashboard-btn {
-    /* Absolute positioning at top left */
     position: absolute;
     top: 15px;
     left: 15px;
     z-index: 9999;
-    
-    /* Remove default link styling */
+
     text-decoration: none;
     display: inline-block;
-    
-    /* Smooth hover transition */
+  
     transition: transform 0.2s ease-in-out, opacity 0.2s ease;
   }
 
   .back-dashboard-btn img {
-    /* Adjust size as needed */
     width: 50px; 
     height: auto;
     display: block;
   }
-
-  /* Interaction effects */
   .back-dashboard-btn:hover {
     transform: scale(1.05);
     opacity: 0.9;
   }
 .sales, .price { font-size: 11px; color: #888; }
 
-/* ================= RESPONSIVE ================= */
 @media (max-width: 900px) {
     .product-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -144,10 +123,7 @@ body {
   <img src="arrow (1).png" alt="Go back to buyers dashboard">
 </a>
 
-<!-- ================= SEARCH BOX ================= -->
 <input type="text" id="search-box" placeholder="Search products by name..." onkeyup="searchProducts()">
-
-<!-- ================= FILTER BUTTONS ================= -->
 <div class="filter-buttons">
     <button class="filter-btn active" data-category="all" onclick="filterProducts('all', this)">ALL</button>
     <?php foreach ($categories as $cat): ?>
@@ -158,8 +134,6 @@ body {
         </button>
     <?php endforeach; ?>
 </div>
-
-<!-- ================= GRID ================= -->
 <div class="product-grid" id="grid">
 <?php if (!$products): ?>
     <p>No products available</p>
@@ -180,9 +154,6 @@ body {
         <?php endif; ?>
     </a>
 </div>
-
-
-
     <div class="info-row">
         <p class="title"><?= htmlspecialchars($p['name']) ?></p>
         <span class="rating">4.8 ★</span>
@@ -199,11 +170,8 @@ body {
 
 <script>
 function filterProducts(category, btn){
-    // active button
     document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
-
-    // filter products
     document.querySelectorAll('.product-card').forEach(card=>{
         const nameMatch = card.dataset.name.includes(document.getElementById('search-box').value.toLowerCase());
         if((category==='all' || card.dataset.category===category) && nameMatch){
@@ -214,7 +182,6 @@ function filterProducts(category, btn){
     });
 }
 
-// ================= SEARCH FUNCTION =================
 function searchProducts() {
     const query = document.getElementById('search-box').value.toLowerCase();
     const activeBtn = document.querySelector('.filter-btn.active').dataset.category;
