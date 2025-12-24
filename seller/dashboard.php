@@ -8,7 +8,6 @@ if(!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'
 
 require '../config/db.php';
 
-// Dashboard metrics
 $metrics = [
     'total_orders' => 0,
     'total_products' => 0,
@@ -16,14 +15,14 @@ $metrics = [
     'revenue_today' => 0.0,
 ];
 
-// Total products for this seller
+
 try {
     $stmt = $con->prepare("SELECT COUNT(*) FROM products WHERE seller_id = ?");
     $stmt->execute([$_SESSION['user_id']]);
     $metrics['total_products'] = (int)$stmt->fetchColumn();
 } catch (Exception $e) {}
 
-// Total orders for this seller (only approved)
+
 try {
     $stmt = $con->prepare("
         SELECT COUNT(DISTINCT o.id)
@@ -36,7 +35,6 @@ try {
     $metrics['total_orders'] = (int)$stmt->fetchColumn();
 } catch (Exception $e) {}
 
-// Pending orders
 try {
     $stmt = $con->prepare("
         SELECT COUNT(DISTINCT o.id)
@@ -49,7 +47,6 @@ try {
     $metrics['pending_orders'] = (int)$stmt->fetchColumn();
 } catch (Exception $e) {}
 
-// Revenue today (all orders today for this seller)
 try {
     $stmt = $con->prepare("
         SELECT COALESCE(SUM(o.total_amount),0)
@@ -64,7 +61,6 @@ try {
     $metrics['revenue_today'] = 0.0;
 }
 
-// Fetch today's orders for this seller with buyer username
 $recentOrders = [];
 try {
     $stmt = $con->prepare("

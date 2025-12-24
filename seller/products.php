@@ -2,26 +2,25 @@
 session_start();
 require_once "../config/db.php";
 
-// AUTO-DETECT database connection
+
 if (isset($conn)) {
-    $db = $conn; // MySQLi
+    $db = $conn; 
 } elseif (isset($con)) {
-    $db = $con; // PDO
+    $db = $con; 
 } else {
     die("Database connection variable not found. Check db.php");
 }
 
-// Get logged-in seller ID
+
 $seller_id = $_SESSION['user_id'] ?? 1;
 
-/* ================= FETCH METRICS ================= */
 try {
     if ($db instanceof PDO) {
         $totalProducts = $db->query("SELECT COUNT(*) AS total FROM products WHERE seller_id=$seller_id")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
         $pendingProducts = $db->query("SELECT COUNT(*) AS total FROM products WHERE seller_id=$seller_id AND status='pending'")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
         $declinedProducts = $db->query("SELECT COUNT(*) AS total FROM products WHERE seller_id=$seller_id AND status='declined'")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
         $products = $db->query("SELECT * FROM products WHERE seller_id=$seller_id ORDER BY created_at DESC");
-    } else { // MySQLi
+    } else { 
         $totalProducts = $db->query("SELECT COUNT(*) AS total FROM products WHERE seller_id=$seller_id")->fetch_assoc()['total'] ?? 0;
         $pendingProducts = $db->query("SELECT COUNT(*) AS total FROM products WHERE seller_id=$seller_id AND status='pending'")->fetch_assoc()['total'] ?? 0;
         $declinedProducts = $db->query("SELECT COUNT(*) AS total FROM products WHERE seller_id=$seller_id AND status='declined'")->fetch_assoc()['total'] ?? 0;
@@ -31,7 +30,6 @@ try {
     die("Error fetching products: " . $e->getMessage());
 }
 
-/* ================= CREATE / UPDATE PRODUCT ================= */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $edit_id = $_POST['edit_id'] ?? null;
     $name = $_POST['name'];
@@ -39,8 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stock = $_POST['stock'];
     $stock_limit = $_POST['stock_limit'];
     $category_id = $_POST['category'] ?? null;
-
-    // Fetch category description automatically
     $categoryDescription = '';
     if ($category_id) {
         if ($db instanceof PDO) {
@@ -56,8 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtCat->fetch();
         }
     }
-
-    // Handle image upload
     $imageName = $_POST['existing_image'] ?? null;
     if (!empty($_FILES['image']['name'])) {
         $imageName = time() . "_" . $_FILES['image']['name'];
@@ -90,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bindValue(':description', $categoryDescription); // use category description
             $stmt->bindValue(':category_id', $category_id, PDO::PARAM_INT);
             $stmt->execute();
-        } else { // MySQLi
+        } else { 
             if ($edit_id) {
                 $stmt = $db->prepare("
                     UPDATE products 
@@ -114,7 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-/* ================= TOGGLE AVAILABILITY ================= */
 if (isset($_GET['toggle']) && isset($_GET['id'])) {
     $toggle_id = intval($_GET['id']);
     $current_status = $_GET['toggle'] === 'available' ? 'available' : 'unavailable';
@@ -137,7 +130,6 @@ if (isset($_GET['toggle']) && isset($_GET['id'])) {
     }
 }
 
-/* ================= DELETE PRODUCT ================= */
 if(isset($_GET['delete_id'])) {
     $delete_id = intval($_GET['delete_id']);
     try {
@@ -168,28 +160,21 @@ if(isset($_GET['delete_id'])) {
 <title>Seller Dashboard - Products Management</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-/* Your existing CSS remains unchanged */
 :root {
     --bg-sidebar: #fdf6f4;
     --bg-main: #ffffff;
     --primary-accent: #f8e8e2;
     --text-dark: #4a332d;
     --border-color: #d1b8b0;
-    --accent-maroon: #b85c55; /* Add this line */
+    --accent-maroon: #b85c55; 
 }
 
-
-/* Global */
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 body { display:flex; height:100vh; background:var(--bg-main); color:var(--text-dark); overflow:hidden; }
-
-/* SIDEBAR */
 aside { width:240px; background:var(--bg-sidebar); border-right:1px solid #eee; display:flex; flex-direction:column; padding:20px 0; }
 .profile-section { padding:0 20px 20px; }
 .profile-circle { width:70px; height:70px; border-radius:50%; background:#e0e0e0; margin-bottom:10px; }
 nav { flex:1; padding:0 10px; }
-
-/* NAV ITEM */
 .nav-item {
     display:flex; align-items:center; padding:10px 14px; margin-bottom:8px;
     text-decoration:none; color:var(--text-dark);
@@ -198,8 +183,6 @@ nav { flex:1; padding:0 10px; }
 }
 .nav-item i { margin-right:12px; width:18px; }
 .nav-item.active { background-color:var(--primary-accent); box-shadow: inset 4px 0 0 #c08080; }
-
-/* LOGOUT */
 .logout-btn {
     padding:20px; text-decoration:none; color:var(--text-dark);
     font-weight:bold; display:flex; align-items:center;
@@ -227,26 +210,24 @@ th, td { border: 1px solid #333; padding: 12px; text-align: center; }
 .image-placeholder { width: 100%; aspect-ratio: 1/1; border: 2.5px solid var(--accent-maroon); border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; }
 .image-placeholder i { font-size: 100px; color: var(--accent-maroon); }
 .btn-submit { background: var(--accent-maroon); color: white; padding: 12px 25px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-/* Ensure buttons inside table cells are aligned and spaced nicely */
-/* Style buttons inside table cells */
 td .btn {
-    display: inline-flex;      /* Inline next to each other */
-    align-items: center;       /* Vertically center text */
-    justify-content: center;   /* Center content horizontally */
-    margin: 2px 4px;           /* Space between buttons */
-    padding: 6px 12px;         /* Adjust padding */
-    font-size: 0.8rem;         /* Smaller font size */
-    white-space: nowrap;       /* Prevent text wrap */
+    display: inline-flex;      
+    align-items: center;       
+    justify-content: center;   
+    margin: 2px 4px;          
+    padding: 6px 12px;     
+    font-size: 0.8rem;        
+    white-space: nowrap;      
 }
 
 td .btn:disabled {
-    background-color: #ccc;    /* Gray out disabled button */
+    background-color: #ccc;    
     color: #666;
     cursor: not-allowed;
 }
 
 td .btn + .btn {
-    margin-left: 6px;          /* Extra space if multiple buttons exist */
+    margin-left: 6px;          
 }
 
 
@@ -328,7 +309,6 @@ td .btn + .btn {
             <td><?= $row['stock'] ?></td>
             <td>₱<?= number_format($row['price'], 2) ?></td>
             <td>
-                <!-- Edit Button -->
                 <button class="btn" onclick="editProduct(
     <?= $row['id'] ?>, 
     '<?= htmlspecialchars($row['name'], ENT_QUOTES) ?>', 
@@ -340,7 +320,6 @@ td .btn + .btn {
 )">Edit</button>
 
 
-                <!-- Pending / Available Toggle -->
                 <?php if($row['status'] === 'pending'): ?>
                     <button class="btn" disabled>Pending Approval</button>
                 <?php else: ?>
@@ -349,7 +328,6 @@ td .btn + .btn {
                     </a>
                 <?php endif; ?>
 
-                <!-- Delete Button -->
                 <a href="?delete_id=<?= $row['id'] ?>" class="btn" onclick="return confirm('Are you sure you want to delete this product?')">
                     Delete
                 </a>
@@ -424,15 +402,11 @@ function editProduct(id, name, price, stock, stock_limit, description, image) {
     document.querySelector('#create-product-view input[name="stock"]').value = stock;
     document.querySelector('#create-product-view input[name="stock_limit"]').value = stock_limit;
     document.querySelector('#create-product-view textarea[name="description"]').value = description;
-
-    // store product id in hidden input for update
     let hidden = document.createElement('input');
     hidden.type = 'hidden';
     hidden.name = 'edit_id';
     hidden.value = id;
     document.querySelector('#create-product-view form').appendChild(hidden);
-
-    // store existing image name
     let hiddenImage = document.createElement('input');
     hiddenImage.type = 'hidden';
     hiddenImage.name = 'existing_image';

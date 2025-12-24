@@ -8,7 +8,7 @@ if(!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'
 
 require '../config/db.php';
 
-// Handle AJAX status update
+
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'], $_POST['new_status'], $_POST['ajax'])) {
     $orderId = $_POST['order_id'];
     $newStatus = $_POST['new_status'];
@@ -20,7 +20,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'], $_POST['ne
     exit;
 }
 
-// Fetch orders from database
 $orders = [];
 try {
     $stmt = $con->query("SELECT id AS order_id, buyer_id, total_amount, order_status, created_at FROM orders ORDER BY id DESC");
@@ -29,7 +28,6 @@ try {
     $orders = [];
 }
 
-// Define allowed statuses
 $statuses = ['pending', 'confirmed', 'shipped', 'delivery', 'cancelled'];
 ?>
 
@@ -51,17 +49,12 @@ $statuses = ['pending', 'confirmed', 'shipped', 'delivery', 'cancelled'];
     --accent-maroon: #b85c55;
 }
 
-/* Global */
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 body { display:flex; height:100vh; background:var(--bg-main); color:var(--text-dark); overflow:hidden; }
-
-/* SIDEBAR */
 aside { width:240px; background:var(--bg-sidebar); border-right:1px solid #eee; display:flex; flex-direction:column; padding:20px 0; }
 .profile-section { padding:0 20px 20px; }
 .profile-circle { width:70px; height:70px; border-radius:50%; background:#e0e0e0; margin-bottom:10px; }
 nav { flex:1; padding:0 10px; }
-
-/* NAV ITEM */
 .nav-item {
     display:flex; align-items:center; padding:10px 14px; margin-bottom:8px;
     text-decoration:none; color:var(--text-dark);
@@ -70,22 +63,16 @@ nav { flex:1; padding:0 10px; }
 }
 .nav-item i { margin-right:12px; width:18px; }
 .nav-item.active { background-color:var(--primary-accent); box-shadow: inset 4px 0 0 #c08080; }
-
-/* LOGOUT */
 .logout-btn {
     padding:20px; text-decoration:none; color:var(--text-dark);
     font-weight:bold; display:flex; align-items:center;
     border-top:1px solid #ccc; margin-top:auto;
 }
-
-/* MAIN CONTENT */
 main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
 header { background:var(--primary-accent); padding:15px 30px; display:flex; align-items:center; gap: 15px; }
 .header-banner h1 { font-size: 1.5rem; }
 .back-btn { background: var(--accent-maroon); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; display: none; }
 .content-body { padding: 30px 40px; }
-
-/* Table & Status */
 table { width:100%; border-collapse:collapse; border:1.5px solid #333; background:#fff; }
 th, td { padding:10px; border:1px solid #ccc; text-align:center; }
 th { background:#c08080; color:#fff; }
@@ -172,7 +159,6 @@ select { padding:4px 6px; border-radius:4px; }
 </main>
 
 <script>
-// Handle status change via AJAX
 document.querySelectorAll('.status-select').forEach(select => {
     select.addEventListener('change', function() {
         const orderId = this.dataset.id;
@@ -190,7 +176,6 @@ document.querySelectorAll('.status-select').forEach(select => {
             .then(res => res.json())
             .then(data => {
                 if(data.success){
-                    // Update status badge
                     statusText.innerHTML = `<span class="status-badge status-${data.new_status}">${data.new_status}</span>`;
                     updatedMsg.style.display = 'inline';
                     setTimeout(() => updatedMsg.style.display = 'none', 1500);
